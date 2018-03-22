@@ -85,6 +85,8 @@ export class NDF {
     return data && typeof data == type
   }
 
+  
+
   static addRelation(name:string,relation:{}){
     if(this.RELATIONS[name]) throw new Error(`the relation has this name[${name}] is already exist`)
     this.RELATIONS[name] = relation
@@ -111,7 +113,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(item)
+          result.push(this.data(type.primitive,item))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
@@ -145,7 +147,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(item)
+          result.push(this.data(type.primitive,item))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
@@ -180,7 +182,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(new FormControl(item))
+          result.push(new FormControl(this.data(type.primitive,item)))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
@@ -215,7 +217,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(item.value)
+          result.push(this.data(type.primitive,item.value))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
@@ -249,7 +251,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(new FormControl(item))
+          result.push(new FormControl(this.data(type.primitive,item)))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
@@ -283,7 +285,7 @@ export class NDF {
           }
           result.push(obj)
         }else{
-          result.push(item.value)
+          result.push(this.data(type.primitive,item.value))
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
