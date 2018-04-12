@@ -16,17 +16,17 @@ export class Exception {
     else if(this.debug) alert(`HttpException : ${err.status}|${err.name}|${err.message}|${err.error}`)
   }
 
-  private static emitBusinessException(resp:ResponseData,handler:()=>{}){
+  private static emitBusinessException(resp:ResponseData,handler:(resp?:ResponseData)=>{}){
     console.log(resp)
-    if(handler) handler()
+    if(handler) handler(resp)
     else if(this.debug) alert(`BusinessException : ${JSON.stringify(resp)}`)
   }
 
-  static addHttpExceptionHandler(status:number,handler:()=>{}){
+  static addHttpExceptionHandler(status:number,handler:()=>void){
     this.httpExceptionHandlers[status] = handler
   }
 
-  static addBusinessExceptionHandler(tag:string,code:number,handler:()=>{}){
+  static addBusinessExceptionHandler(tag:string,code:number,handler:(resp?:ResponseData)=>void){
     if(!this.businessExceptionHandlers[tag]) this.businessExceptionHandlers[tag] = {}
     this.businessExceptionHandlers[tag][code] = handler
   }
