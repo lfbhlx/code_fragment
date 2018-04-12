@@ -198,5 +198,5 @@ object ScaHttp {
   }
 
   def clientSSL(strategy:TrustStrategy):ScaHttpClient = clientSSL(getDefaultSSLConnectionSocketFactory(strategy))
-  
+
 }
