@@ -4,8 +4,6 @@ import java.io.{BufferedWriter, File, FileOutputStream, OutputStreamWriter}
 
 object OperationLogger {
 
-  // http://pv.sohu.com/cityjson?ie=utf-8
-
   object Mode {
     val KEY = "MODE"
     val MODE_MEM = "MEM"
@@ -29,9 +27,19 @@ object OperationLogger {
     var DEFAULT = 1024 * 1024 * 2
   }
 
+  object CacheLimitTime {
+    val KEY = "CACHE_LIMIT_TIME"
+    var DEFAULT = 1000*60*15
+  }
+
   object FileLimitSize {
     val KEY = "FILE_LIMIT_SIZE"
     var DEFAULT = 1024 * 1024 * 10
+  }
+
+  object FileCheckTime {
+    val KEY = "FILE_CHECK_TIME"
+    val DEFAULT = 1000*15
   }
 
   object FileLocation {
@@ -103,14 +111,14 @@ object OperationLogger {
       var outTime = 0
       while(true)
       {
-        if(fileWriterFlag || outTime>1000*60*15){
+        if(fileWriterFlag || outTime>CacheLimitTime.DEFAULT){
           logsMap.foreach(_._2.flush())
           CacheSize = 0
           fileWriterFlag = false
           outTime = 0
         }
-        Thread.sleep(1500)
-        outTime += 1500
+        Thread.sleep(FileCheckTime.DEFAULT)
+        outTime += FileCheckTime.DEFAULT
       }
     }
   })
