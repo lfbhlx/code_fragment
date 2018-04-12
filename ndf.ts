@@ -1,41 +1,6 @@
 
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 
-export class ChildTestModel {
-  constructor(
-    public commonId?:string,
-    public commonVal?:string,
-    public userArr?:string[]
-  ){}
-}
-
-export class ArrayTestModel {
-  constructor(
-    public id?:number,
-    public name?:string
-  ){}
-}
-
-export class TestModel {
-  constructor(
-    public token?:string,
-    public name?:string,
-    public time?:number,
-    public array?:ArrayTestModel[],
-    public object?:{},
-    public commonConfig?:ChildTestModel
-  ){}
-
-  private innerFunc(){
-    console.log('i m private function')
-  }
-
-  get(){
-    this.innerFunc()
-    return this.token
-  }
-}
-
 export class NDF {
 
   private static RELATIONS = {}
@@ -85,8 +50,6 @@ export class NDF {
     return data && typeof data == type
   }
 
-  
-
   static addRelation(name:string,relation:{}){
     if(this.RELATIONS[name]) throw new Error(`the relation has this name[${name}] is already exist`)
     this.RELATIONS[name] = relation
@@ -100,6 +63,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = []
       for(let item of data)
       {
@@ -117,6 +81,7 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = new type.model()
       for(let field in relation)
       {
@@ -134,6 +99,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = []
       for(let item of data)
       {
@@ -151,6 +117,7 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = {}
       for(let field in relation)
       {
@@ -168,6 +135,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = new FormArray([])
       for(let item of data)
       {
@@ -176,7 +144,6 @@ export class NDF {
           for(let field in relation)
           {
             if(field.indexOf('$') == -1){
-              //obj[this.to(relation[field])] = this.n2d(relation[field],item[field])
               obj.setControl(this.to(relation[field]),this.d2f(relation[field],item[field]))
             }
           }
@@ -186,11 +153,11 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = new FormGroup({})
       for(let field in relation)
       {
         if(field.indexOf('$') == -1){
-          //result[this.to(relation[field])] = this.n2d(relation[field],data[field])
           result.setControl(this.to(relation[field]),this.d2f(relation[field],data[field]))
         }
       }
@@ -204,6 +171,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = []
       for(let item of data['controls'])
       {
@@ -221,6 +189,7 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = new type.model()
       for(let field in relation)
       {
@@ -238,6 +207,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = new FormArray([])
       for(let item of data)
       {
@@ -255,6 +225,7 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = new FormGroup({})
       for(let field in relation)
       {
@@ -272,6 +243,7 @@ export class NDF {
     let type = this.type(relation)
     let result = null
     if(type.type == this.$TYPE_ARRAY){
+      if(data == null || typeof data == 'undefined') return null
       result = []
       for(let item of data['controls'])
       {
@@ -289,6 +261,7 @@ export class NDF {
         }
       }
     }else if(type.type == this.$TYPE_OBJECT){
+      if(data == null || typeof data == 'undefined') return null
       result = new type.model()
       for(let field in relation)
       {
@@ -302,95 +275,5 @@ export class NDF {
     return result
   }
 
-  static test(){
-    var relation = {
-      $type:'{}',
-      $model:TestModel,
-      token:{
-        $to:'token',
-        $type:'string'
-      },
-      name:{
-        $to:'name',
-        $type:'string'
-      },
-      time:{
-        $to:'time',
-        $type:'number'
-      },
-      array:{
-        $to:'array',
-        $type:'{}[]',
-        $model:ArrayTestModel,
-        id:{
-          $to:'id',
-          $type:'number'
-        },
-        name:{
-          $to:'name',
-          $type:'string'
-        }
-      },
-      object:{
-        $to:'object',
-        $type:'{}',
-        oid:{
-          $to:'oid',
-          $type:'string'
-        },
-        secret:{
-          $to:'secret',
-          $type:'string'
-        }
-      },
-      commonConfig:{
-        $to:'commonConfig',
-        $type:'{}',
-        $model:ChildTestModel,
-        commonId:{
-          $to:'commonId',
-          $type:'string'
-        },
-        commonVal:{
-          $to:'commonVal',
-          $type:'string'
-        },
-        userArr:{
-          $to:'userArr',
-          $type:'string[]'
-        }
-      }
-    }
-    let data = {
-      token:null,
-      name:'lfbhlx',
-      time:123456,
-      array:[{id:1,name:'apple'},{id:2,name:'banana'}],
-      object:{
-        oid:'myoid',
-        secret:'mysecret'
-      },
-      commonConfig:{
-        commonId:'123d1231',
-        commonVal:'123d1231d',
-        userArr:['one','two','three']
-      }
-    }
-    this.addRelation('a',relation)
-
-    let dm = this.n2d<TestModel>(this.getRelation('a'),data)
-    dm.get()
-    console.log(dm)
-    let nm = this.d2n(this.getRelation('a'),dm)
-    console.log(nm)
-    let fm = this.d2f(this.getRelation('a'),dm)
-    console.log(fm)
-    let dm2 = this.f2d<TestModel>(this.getRelation('a'),fm)
-    console.log(dm2)
-    let fm2 = this.n2f(this.getRelation('a'),nm)
-    console.log(fm2)
-    let nm2 = this.f2n(this.getRelation('a'),fm2)
-    console.log(nm2)
-  }
 
 }
